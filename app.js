@@ -2,22 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const mysql = require("mysql");
-
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'yoplayer'
-})
-
-connection.connect((err) => {
-    if (err) {
-        console.log(err)
-    } else {
-        console.log('DB Connected')
-    }
-})
+const connection = require('./config')
 
 const app = express()
 app.use(morgan('dev'))

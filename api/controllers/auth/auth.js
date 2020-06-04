@@ -1,12 +1,6 @@
-const mysql = require("mysql");
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'yoplayer'
-})
+const conn = require('../../../config')
 
-
+// Register User
 const register = (req, res) => {
     const data = {
         name: req.body.name,
@@ -43,27 +37,42 @@ const register = (req, res) => {
     }
 
     if (errors.name_err || errors.email_err || errors.type_err || errors.password_err) {
-        res.send({
+        res.status(500).json({
             errors
         })
     } else {
-        connection.query('INSERT INTO users SET ?', data, (err, res) => {
-            if (err) {
-                console.log(err)
-            } else {
-                console.log("seccess")
-            }
-        });
+
+        conn.query("SELECT * FROM users WHERE email = ?", [data.email], (err, result) => {
+            if (!err)
+                if (result.length > 0)
+                    res.status(200).json({
+                        message: "exist"
+                    })
+                else
+                    conn.query('INSERT INTO users SET ?', data, (err, result) => {
+                        if (!err)
+                            res.status(200).json({
+                                message: 'success'
+                            })
+                        else
+                            res.send(err)
+                    })
+            else
+                res.send(err)
+        })
+
     }
-
-
 }
 
+
+// Login User
 const login = (req, res) => {
     res.send({
         message: "I am login controller"
     })
 }
+
+
 
 module.exports = {
     register,
