@@ -12,7 +12,10 @@ app.use(cors())
 
 
 const authRoute = require('./api/routes/auth')
+const adminRoute = require('./api/routes/admin')
+
 app.use('/api/auth', authRoute)
+app.use('/api/admin', adminRoute)
 
 
 

@@ -66,7 +66,6 @@ const register = (req, res) => {
                                 res.send(err)
                         })
                     })
-
             else
                 res.send(err)
         })
@@ -86,7 +85,7 @@ const login = (req, res) => {
                     }
 
                     if (result) {
-                        let apiToken = jwt.sign({ email: req.body.email, role: 'user' }, 'SECRET', { expiresIn: '1d' });
+                        let apiToken = jwt.sign({ email: req.body.email, role: user[0].role }, 'SECRET', { expiresIn: '1d' });
                         conn.query("UPDATE users SET token = ?", apiToken, (err, result) => {
                             if (!err)
                                 res.status(200).json({
